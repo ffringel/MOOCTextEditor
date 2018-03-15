@@ -17,14 +17,14 @@ public class DocumentBenchmarking {
 
 	    // Run each test more than once to get bigger numbers and less noise.
 	    // You can try playing around with this number.
-	    int trials = 100;
+	    int trials = 30;
 
 	    // The text to test on
 	    String textfile = "data/warAndPeace.txt";
 		
 	    // The amount of characters to increment each step
 	    // You can play around with this
-		int increment = 20000;
+		int increment = 50000;
 
 		// The number of steps to run.  
 		// You can play around with this.
@@ -33,32 +33,35 @@ public class DocumentBenchmarking {
 		// THe number of characters to start with. 
 		// You can play around with this.
 		int start = 50000;
-		
+
+
+		System.out.println("NumberOfChars\tBasicTime\tEfficientTime\t");
 		// TODO: Fill in the rest of this method so that it runs two loops
 		// and prints out timing results as described in the assignment 
 		// instructions and following the pseudocode below.
 		for (int numToCheck = start; numToCheck < numSteps*increment + start; 
 				numToCheck += increment)
 		{
-			// numToCheck holds the number of characters that you should read from the 
-			// file to create both a BasicDocument and an EfficientDocument.  
-			
-			/* Each time through this loop you should:
-			 * 1. Print out numToCheck followed by a tab (\t) (NOT a newline)
-			 * 2. Read numToCheck characters from the file into a String
-			 *     Hint: use the helper method below.
-			 * 3. Time a loop that runs trials times (trials is the variable above) that:
-			 *     a. Creates a BasicDocument 
-			 *     b. Calls fleshScore on this document
-			 * 4. Print out the time it took to complete the loop in step 3 
-			 *      (on the same line as the first print statement) followed by a tab (\t)
-			 * 5. Time a loop that runs trials times (trials is the variable above) that:
-			 *     a. Creates an EfficientDocument 
-			 *     b. Calls fleshScore on this document
-			 * 6. Print out the time it took to complete the loop in step 5 
-			 *      (on the same line as the first print statement) followed by a newline (\n) 
-			 */  
-			 
+			System.out.printf("%s\t", numToCheck);
+			String inputString = getStringFromFile(textfile, numToCheck);
+
+			long basicStart = System.nanoTime();
+			for (int i = 0; i < trials; i++) {
+				BasicDocument basicDocument = new BasicDocument(inputString);
+				basicDocument.getFleschScore();
+			}
+			double basicTime = (double)(System.nanoTime() - basicStart) /  1000000000;
+			System.out.printf("%s\t", basicTime);
+
+			long efficientStart = System.nanoTime();
+			for (int i = 0; i < trials; i++) {
+				EfficientDocument efficientDocument = new EfficientDocument(inputString);
+				efficientDocument.getFleschScore();
+			}
+			double efficientTime = (double)(System.nanoTime() - efficientStart) /  1000000000;
+			System.out.printf("%s\t", efficientTime);
+
+			System.out.println();
 		}
 	
 	}

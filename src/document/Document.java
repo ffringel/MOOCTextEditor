@@ -144,8 +144,8 @@ public abstract class Document {
 	public double getFleschScore()
 	{
 	    double fleschScore;
-	    double wordsPerSentence = (double) getNumWords() / getNumSentences();
-	    double syllablesPerWord = (double) getNumSyllables() / getNumWords();
+	    double wordsPerSentence = ((double) getNumWords()) / getNumSentences();
+	    double syllablesPerWord = ((double) getNumSyllables()) / getNumWords();
 
 	    fleschScore = 206.835 - (1.015 * wordsPerSentence) - (84.6 * syllablesPerWord);
 
