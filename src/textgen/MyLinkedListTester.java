@@ -114,7 +114,13 @@ public class MyLinkedListTester {
 		assertEquals("Remove: check element 0 is correct ", (Integer)21, list1.get(0));
 		assertEquals("Remove: check size is correct ", 2, list1.size());
 		
-		// TODO: Add more tests here
+		try {
+			emptyList.remove(0);
+			fail("Check out of bounds");
+
+		} catch (IndexOutOfBoundsException e) {
+
+		}
 	}
 	
 	/** Test adding an element into the end of the list, specifically
@@ -123,7 +129,18 @@ public class MyLinkedListTester {
 	@Test
 	public void testAddEnd()
 	{
-        // TODO: implement this test
+        boolean value = list1.add(71);
+        assertEquals("Add at tail: check value is correct", true, value);
+        assertEquals("Add at tail: check element 3 is correct ", (Integer)71, list1.get(3));
+        assertEquals("Add at tail: check size is correct ", 4, list1.size());
+
+		shortList.add("C");
+		assertEquals("Add at index position: check value at 2", "C", shortList.get(2));
+		assertEquals("Add at index position ", 3, shortList.size());
+
+		emptyList.add(34);
+		assertEquals("Add at index position: check value at 0", (Integer)34, emptyList.get(0));
+		assertEquals("Add at index position ", 1, emptyList.size());
 		
 	}
 
@@ -132,7 +149,12 @@ public class MyLinkedListTester {
 	@Test
 	public void testSize()
 	{
-		// TODO: implement this test
+
+		int size = list1.size();
+		assertEquals("Size ", 3, size);
+
+		int empty = emptyList.size();
+		assertEquals("size of an empty list ", 0, empty);
 	}
 
 	
@@ -144,7 +166,17 @@ public class MyLinkedListTester {
 	@Test
 	public void testAddAtIndex()
 	{
-        // TODO: implement this test
+        list1.add(1, 54);
+        assertEquals("Add at index position: check value at 1", (Integer)54, list1.get(1));
+        assertEquals("Add at index position: check size", 4, list1.size());
+
+        shortList.add(0, "C");
+        assertEquals("Add at index position: check value at 0", "C", shortList.get(0));
+        assertEquals("Add at index position ", 3, shortList.size());
+
+        emptyList.add(0, 34);
+		assertEquals("Add at index position: check value at 0", (Integer)34, emptyList.get(0));
+		assertEquals("Add at index position ", 1, emptyList.size());
 		
 	}
 	
@@ -152,11 +184,25 @@ public class MyLinkedListTester {
 	@Test
 	public void testSet()
 	{
-	    // TODO: implement this test
+		try {
+			list1.set(-1, 12);
+			fail("Check out of bound");
+		} catch (IndexOutOfBoundsException e) {
+
+		}
+
+		try {
+			emptyList.set(1, 12);
+			fail("Check out of bound");
+		} catch (IndexOutOfBoundsException e) {
+
+		}
+
+	    int value = list1.set(1, 18);
+	    assertEquals("Set: check return value correct", 21, value);
+	    assertEquals("Set: check value at position 1", (Integer)18, list1.get(1));
+	    assertEquals("Set: check size stays thesame", 3, list1.size());
 	    
 	}
-	
-	
-	// TODO: Optionally add more test methods.
 	
 }
