@@ -71,6 +71,7 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 				word = node.getRandomNextWord(rnGenerator);
 			}
 			output.append(word).append(" ");
+			
 	    	currentWord = word;
 
 	    	count++;
