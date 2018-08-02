@@ -1,10 +1,6 @@
 package spelling;
 
-import java.util.List;
-import java.util.Set;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.*;
 
 /** 
  * An trie data structure that implements the Dictionary and the AutoComplete ADT
@@ -37,9 +33,25 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	 * @return true if the word was successfully added or false if it already exists
 	 * in the dictionary.
 	 */
-	public boolean addWord(String word)
-	{
-	    //TODO: Implement this method.
+	public boolean addWord(String word) {
+
+		String addWord = word.toLowerCase();
+		TrieNode current = root;
+
+		for (char ch : addWord.toCharArray()) {
+			if (current.getValidNextCharacters().contains(ch)) {
+				current = current.getChild(ch);
+			} else {
+				current = current.insert(ch);
+			}
+		}
+
+		if (!current.endsWord()) {
+			current.setEndsWord(true);
+			size++;
+			return true;
+		}
+
 	    return false;
 	}
 	
@@ -47,20 +59,29 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	 * Return the number of words in the dictionary.  This is NOT necessarily the same
 	 * as the number of TrieNodes in the trie.
 	 */
-	public int size()
-	{
-	    //TODO: Implement this method
-	    return 0;
+	public int size() {
+	    return size;
 	}
 	
 	
 	/** Returns whether the string is a word in the trie, using the algorithm
 	 * described in the videos for this week. */
 	@Override
-	public boolean isWord(String s) 
-	{
-	    // TODO: Implement this method
-		return false;
+	public boolean isWord(String s) {
+
+		String isWord = s.toLowerCase();
+		TrieNode node = root;
+
+		for (char ch : isWord.toCharArray()) {
+			if (node.getValidNextCharacters().contains(ch)) {
+				node = node.getChild(ch);
+			} else {
+				return false;
+			}
+		}
+
+		return node.endsWord();
+
 	}
 
 	/** 
@@ -100,8 +121,46 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
     	 //       If it is a word, add it to the completions list
     	 //       Add all of its child nodes to the back of the queue
     	 // Return the list of completions
+		 String stem = prefix.toLowerCase();
+		 List<String> predictions = new LinkedList<>();
+		 TrieNode node = root;
+
+		 for (char ch : stem.toCharArray()) {
+		 	if (node.getValidNextCharacters().contains(ch)) {
+				node = node.getChild(ch);
+			} else {
+		 		return predictions;
+			}
+		 }
+
+		 int count = 0;
+		 Queue<TrieNode> nodes = new LinkedList<>();
+		 List<Character> children = new LinkedList<>(node.getValidNextCharacters());
+
+		 if (node.endsWord()) {
+		 	predictions.add(node.getText());
+		 	count++;
+		 }
+
+		 for (char ch : children) {
+			 nodes.add(node.getChild(ch));
+		 }
+
+		 while (!nodes.isEmpty() && count < numCompletions) {
+		 	TrieNode first = nodes.poll();
+		 	if (first.endsWord()) {
+		 		predictions.add(first.getText());
+		 		count++;
+			}
+
+			List<Character> childNotes = new LinkedList<>(first.getValidNextCharacters());
+
+		 	for (char ch : childNotes) {
+		 		nodes.add(first.getChild(ch));
+			}
+		 }
     	 
-         return null;
+         return predictions;
      }
 
  	// For debugging
